@@ -1,6 +1,11 @@
 package es.plaza.retobici.stop;
 
+import es.plaza.retobici.bike.Bike;
+import es.plaza.retobici.bike.BikeDto;
+import es.plaza.retobici.reservation.ReservationDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,17 +16,25 @@ public class StopController {
 
     private final StopService stopService;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public StopController(StopService stopService) { this.stopService = stopService; }
+    public StopController(StopService stopService, ModelMapper modelMapper) {
+        this.stopService = stopService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public List<Stop> getStops(){ return stopService.getStops(); }
 
-    @PostMapping(path = "/{stopId}/unlock/{bikeType}")
-    public boolean unlockBike(
+    @PostMapping(path = "/unlock/{stopId}")
+    public ResponseEntity<BikeDto> unlockBike(
             @PathVariable("stopId") Long stopId,
-            @PathVariable("bikeType") String bikeType
+            @RequestParam String bikeType
     ){
-        return true;
+        Bike bike = stopService.unlockBike(stopId, bikeType);
+        BikeDto response = modelMapper.map(bike, BikeDto.class);
+        return ResponseEntity.ok(response);
+
     }
 }

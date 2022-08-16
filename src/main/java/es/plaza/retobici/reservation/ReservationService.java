@@ -2,7 +2,6 @@ package es.plaza.retobici.reservation;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
-import es.plaza.retobici.exception.ApiException;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.stop.Stop;
 import es.plaza.retobici.stop.StopService;
@@ -34,7 +33,7 @@ public class ReservationService {
 
     public Reservation reserveBike(Long stopId, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
-        if (!stopService.checkBikeTypeAvailability(stopId,bikeT)) throw new ApiRequestException("No bike type with that name");
+        if (!stopService.checkBikeTypeAvailability(stopId,bikeT)) throw new ApiRequestException("No bikes available for that type");
         //TODO get user id
         Long fakeUserId = 1L;
         Stop stop = stopService.getStop(stopId);

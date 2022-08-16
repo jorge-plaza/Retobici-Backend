@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "electric_bikes")
+@Table(name = "electricbike")
 public class ElectricBike extends Bike{
     @Column(name = "battery") private Integer battery;
 
