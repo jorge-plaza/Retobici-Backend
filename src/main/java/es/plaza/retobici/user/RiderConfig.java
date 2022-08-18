@@ -3,6 +3,8 @@ package es.plaza.retobici.user;
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeRepository;
 import es.plaza.retobici.bike.ElectricBike;
+import es.plaza.retobici.spot.Spot;
+import es.plaza.retobici.spot.SpotRepository;
 import es.plaza.retobici.stop.Stop;
 import es.plaza.retobici.stop.StopRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +22,8 @@ public class RiderConfig {
     CommandLineRunner commandLineRunner(
             RiderRepository repository,
             StopRepository stopRepository,
-            BikeRepository bikeRepository
+            BikeRepository bikeRepository,
+            SpotRepository spotRepository
     ){
         return args -> {
             Rider u1 = new Rider(
@@ -39,10 +42,14 @@ public class RiderConfig {
             Bike b1 = new Bike(s1);
             ElectricBike b2 = new ElectricBike(s1,60);
 
+            Spot sp1 = new Spot(1L,s1);
+            Spot sp2 = new Spot(2L,s1, b1);
+            Spot sp3 = new Spot(3L,s1, b2);
+
             repository.saveAll(List.of(u1, u2));
             stopRepository.save(s1);
             bikeRepository.saveAll(List.of(b1,b2));
-
+            spotRepository.saveAll(List.of(sp1,sp2,sp3));
 
         };
     }
