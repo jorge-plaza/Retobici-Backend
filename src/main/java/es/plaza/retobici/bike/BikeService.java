@@ -25,7 +25,7 @@ public class BikeService {
     }
 
     public Bike getBikeFromStop(Stop stopId, Class<Bike> bikeT){
-        return bikeRepository.getBikeWithTypeInStop(es.plaza.retobici.bike.Bike.class,stopId);
+        return bikeRepository.findAll(BikeSpecification.searchByType(bikeT,stopId)).get(0);
     }
 
     public static Class<Bike> parseBikeType(String bikeType){
