@@ -36,21 +36,19 @@ public class RiderConfig {
                     "cris@mail.com",
                     LocalDate.of(2000, Month.DECEMBER,6)
             );
+            repository.saveAll(List.of(u1, u2));
 
             Stop s1 = new Stop(45.477945964124864, 9.169332864676747, "Arco de la paz", 10);
-
-            Bike b1 = new Bike(s1);
-            ElectricBike b2 = new ElectricBike(s1,60);
+            stopRepository.save(s1);
 
             Spot sp1 = new Spot(1L,s1);
-            Spot sp2 = new Spot(2L,s1, b1);
-            Spot sp3 = new Spot(3L,s1, b2);
-
-            repository.saveAll(List.of(u1, u2));
-            stopRepository.save(s1);
-            bikeRepository.saveAll(List.of(b1,b2));
+            Spot sp2 = new Spot(2L,s1);
+            Spot sp3 = new Spot(3L,s1);
             spotRepository.saveAll(List.of(sp1,sp2,sp3));
 
+            Bike b1 = new Bike(sp2);
+            ElectricBike b2 = new ElectricBike(sp3,60);
+            bikeRepository.saveAll(List.of(b1,b2));
         };
     }
 }

@@ -39,7 +39,7 @@ public class StopService {
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No bikes available for that type"));
         List<Bike> bikes = stop.getBikes();
         for (Bike bike: bikes) {
-
+            System.out.println(bike);
         }
         return true;
     }

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.reservation.Reservation;
 import es.plaza.retobici.route.Route;
+import es.plaza.retobici.spot.Spot;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "stops")
@@ -27,7 +29,7 @@ public class Stop {
     private Integer totalSpaces;
 
     @OneToMany(mappedBy = "stop")
-    private List<Bike> bikes;
+    private List<Spot> spots;
 
     @OneToMany(mappedBy = "initialStop")
     private List<Route> routesWithStart;
@@ -94,11 +96,7 @@ public class Stop {
     }
 
     public List<Bike> getBikes() {
-        return bikes;
-    }
-
-    public void setBikes(List<Bike> bikes) {
-        this.bikes = bikes;
+        return this.getSpots().stream().map(Spot::getBike).collect(Collectors.toList());
     }
 
     public List<Route> getRoutesWithStart() {
@@ -125,4 +123,11 @@ public class Stop {
         this.reservations = reservations;
     }
 
+    public List<Spot> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(List<Spot> spots) {
+        this.spots = spots;
+    }
 }
