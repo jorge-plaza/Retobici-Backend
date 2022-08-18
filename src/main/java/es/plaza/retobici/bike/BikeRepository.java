@@ -13,7 +13,4 @@ import java.util.List;
 @Repository
 public interface BikeRepository extends JpaRepository<Bike, Long>, JpaSpecificationExecutor<Bike> {
 
-    @Query("select b from Bike b WHERE TYPE(b) IN :bikeT and b.stop = :stop")
-    Bike getBikeWithTypeInStop(@Param("bikeT") Class<Bike> bikeT, @Param("stop") Stop stopId);
-
 }

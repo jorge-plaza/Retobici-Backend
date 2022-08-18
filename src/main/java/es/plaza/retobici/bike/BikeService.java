@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BikeService {
@@ -25,7 +26,9 @@ public class BikeService {
     }
 
     public Bike getBikeFromStop(Stop stopId, Class<Bike> bikeT){
-        return bikeRepository.findAll(BikeSpecification.searchByType(bikeT,stopId)).get(0);
+        Optional<Bike> result = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stopId));
+        if (result.isEmpty()) throw new ApiRequestException("The is no bike available for that type");
+        return result.get();
     }
 
     public static Class<Bike> parseBikeType(String bikeType){
