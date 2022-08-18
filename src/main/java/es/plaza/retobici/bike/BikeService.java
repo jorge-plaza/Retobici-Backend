@@ -28,6 +28,7 @@ public class BikeService {
     public Bike getBikeFromStop(Stop stopId, Class<Bike> bikeT){
         Optional<Bike> result = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stopId));
         if (result.isEmpty()) throw new ApiRequestException("The is no bike available for that type");
+        //
         return result.get();
     }
 
