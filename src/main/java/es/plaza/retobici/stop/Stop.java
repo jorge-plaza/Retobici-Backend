@@ -8,6 +8,7 @@ import es.plaza.retobici.spot.Spot;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Entity
@@ -96,7 +97,10 @@ public class Stop {
     }
 
     public List<Bike> getBikes() {
-        return this.getSpots().stream().map(Spot::getBike).collect(Collectors.toList());
+        return this.getSpots().stream()
+                .map(Spot::getBike)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public List<Route> getRoutesWithStart() {

@@ -33,10 +33,10 @@ public class ReservationService {
 
     public Reservation reserveBike(Long stopId, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
-        if (!stopService.checkBikeTypeAvailability(stopId,bikeT)) throw new ApiRequestException("No bikes available for that type");
+        Stop stop = stopService.getStop(stopId);
+        if (!stopService.checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
         //TODO get user id
         Long fakeUserId = 1L;
-        Stop stop = stopService.getStop(stopId);
         Rider rider = riderService.getRider(fakeUserId);
         Reservation r = new Reservation(rider,stop, bikeT.getSimpleName());
         return reservationRepository.save(r);

@@ -31,17 +31,18 @@ public class StopService {
     }
     public Bike unlockBike(Long stopId, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
-        if (!checkBikeTypeAvailability(stopId,bikeT)) throw new ApiRequestException("No bikes available for that type");
+        Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
+        if (!checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
         return getBikeFromStop(stopId, bikeT);
     }
 
-    public boolean checkBikeTypeAvailability(Long stopId, Class<Bike> bikeT) {
-        Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No bikes available for that type"));
+    public boolean checkBikeTypeAvailability(Stop stop, Class<Bike> bikeT) {
         List<Bike> bikes = stop.getBikes();
+        System.out.println(bikes.size());
         for (Bike bike: bikes) {
-            System.out.println(bike);
+            if (bike.getClass().equals(bikeT)) return true;
         }
-        return true;
+        return false;
     }
 
     public Bike getBikeFromStop(Long stopId, Class<Bike> bikeT){
