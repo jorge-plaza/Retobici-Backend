@@ -44,11 +44,14 @@ public class RiderConfig {
             Spot sp1 = new Spot(1L,s1);
             Spot sp2 = new Spot(2L,s1);
             Spot sp3 = new Spot(3L,s1);
-            spotRepository.saveAll(List.of(sp1,sp2,sp3));
 
-            Bike b1 = new Bike(sp2);
-            ElectricBike b2 = new ElectricBike(sp3,60);
+            Bike b1 = new Bike();
+            ElectricBike b2 = new ElectricBike(60);
+            sp1.setBike(b1);
+            sp2.setBike(b2);
             bikeRepository.saveAll(List.of(b1,b2));
+            spotRepository.saveAll(List.of(sp1,sp2,sp3));
+            Bike nb1 = bikeRepository.findById(1L).get();
         };
     }
 }

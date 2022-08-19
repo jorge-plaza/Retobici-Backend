@@ -20,8 +20,7 @@ public class Spot {
     @JoinColumn(name = "stop_id")
     private Stop stop;
 
-    @OneToOne
-    @Nullable
+    @OneToOne(targetEntity = Bike.class)
     private Bike bike;
 
     public Spot() {

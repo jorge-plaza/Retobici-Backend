@@ -21,8 +21,7 @@ public class Bike {
     @OneToMany(mappedBy = "bike")
     private List<Route> routes;
 
-    @OneToOne
-    @Nullable
+    @OneToOne(targetEntity = Spot.class, mappedBy = "bike")
     private Spot spot;
 
     @Transient
@@ -30,13 +29,11 @@ public class Bike {
 
     public Bike() {}
 
-    public Bike(Long id, @Nullable Spot spot) {
+    public Bike(Long id, List<Route> routes, Spot spot, Stop stop) {
         this.id = id;
+        this.routes = routes;
         this.spot = spot;
-    }
-
-    public Bike(@Nullable Spot spot) {
-        this.spot = spot;
+        this.stop = stop;
     }
 
     public Long getId() {
@@ -55,16 +52,14 @@ public class Bike {
         this.routes = routes;
     }
 
-    @Nullable
     public Spot getSpot() {
         return spot;
     }
 
-    public void setSpot(@Nullable Spot spot) {
+    public void setSpot(Spot spot) {
         this.spot = spot;
     }
 
-    @Nullable
     public Stop getStop() {
         return this.spot != null ? this.spot.getStop() : null;
     }
