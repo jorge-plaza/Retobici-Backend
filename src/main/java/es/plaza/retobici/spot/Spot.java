@@ -63,4 +63,8 @@ public class Spot {
     public void setBike(@Nullable Bike bike) {
         this.bike = bike;
     }
+
+    public boolean isEmpty() {
+        return this.bike==null;
+    }
 }

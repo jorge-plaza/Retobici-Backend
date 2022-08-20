@@ -134,4 +134,8 @@ public class Stop {
     public void setSpots(List<Spot> spots) {
         this.spots = spots;
     }
+
+    public boolean enoughSpace() {
+        return this.getBikes().size()<totalSpaces;
+    }
 }

@@ -4,6 +4,7 @@ import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
+import es.plaza.retobici.spot.Spot;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,15 @@ public class StopService {
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
         if (!checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
         return getBikeFromStop(stopId, bikeT);
+    }
+
+    @Transactional
+    public boolean lockBike(Long stopId, Spot spot, Bike bike){
+        Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
+        if (stop.enoughSpace()) return false;
+        if (!spot.isEmpty()) return false;
+        spot.setBike(bike);
+        return true;
     }
 
     public boolean checkBikeTypeAvailability(@NotNull Stop stop, Class<Bike> bikeT) {
