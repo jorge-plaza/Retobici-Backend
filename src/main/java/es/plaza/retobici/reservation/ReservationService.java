@@ -38,7 +38,7 @@ public class ReservationService {
         //TODO get user id
         Long fakeUserId = 1L;
         Rider rider = riderService.getRider(fakeUserId);
-        Reservation r = new Reservation(rider,stop, bikeT.getSimpleName());
+        Reservation r = new Reservation(rider,stop, bikeT);
         return reservationRepository.save(r);
     }
 

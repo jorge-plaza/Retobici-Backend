@@ -72,4 +72,8 @@ public class Bike {
                 ", spot=" + spot +
                 '}';
     }
+
+    public boolean ofType(Class<? extends Bike> bikeT) {
+        return this.getClass().equals(bikeT);
+    }
 }

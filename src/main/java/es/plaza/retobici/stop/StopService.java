@@ -3,6 +3,7 @@ package es.plaza.retobici.stop;
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
+import es.plaza.retobici.reservation.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +38,15 @@ public class StopService {
     }
 
     public boolean checkBikeTypeAvailability(Stop stop, Class<Bike> bikeT) {
-        List<Bike> bikes = stop.getBikes();
-        System.out.println(bikes.size());
-        for (Bike bike: bikes) {
-            if (bike.getClass().equals(bikeT)) return true;
-        }
-        return false;
+        List<Reservation> reservationsOfType = stop.getReservations()
+                .stream()
+                .filter(reservation -> reservation.ofBikeType(bikeT))
+                .toList();
+        List<Bike> bikesOfType = stop.getBikes()
+                .stream()
+                .filter(bike -> bike.ofType(bikeT))
+                .toList();
+        return bikesOfType.size() > reservationsOfType.size();
     }
 
     public Bike getBikeFromStop(Long stopId, Class<Bike> bikeT){

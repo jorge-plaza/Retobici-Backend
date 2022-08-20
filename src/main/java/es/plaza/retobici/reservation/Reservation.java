@@ -1,6 +1,7 @@
 package es.plaza.retobici.reservation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.stop.Stop;
 import es.plaza.retobici.user.Rider;
 import org.springframework.lang.Nullable;
@@ -24,17 +25,17 @@ public class Reservation {
     private Stop stop;
 
     @Column(nullable = false)
-    private String bike_type;
+    private Class<? extends Bike> bike_type;
 
     public Reservation() {}
 
-    public Reservation(Rider rider, Stop stop, String bike_type) {
+    public Reservation(Rider rider, Stop stop, Class<? extends Bike> bike_type) {
         this.rider = rider;
         this.stop = stop;
         this.bike_type = bike_type;
     }
 
-    public Reservation(Long id, Rider rider, Stop stop, String bike_type) {
+    public Reservation(Long id, Rider rider, Stop stop, Class<? extends Bike> bike_type) {
         this.id = id;
         this.rider = rider;
         this.stop = stop;
@@ -65,12 +66,15 @@ public class Reservation {
         this.stop = stop;
     }
 
-    public String getBike_type() {
+    public Class<? extends Bike> getBike_type() {
         return bike_type;
     }
 
-    public void setBike_type(String bike_type) {
+    public void setBike_type(Class<? extends Bike> bike_type) {
         this.bike_type = bike_type;
     }
 
+    public boolean ofBikeType(Class<? extends Bike> bikeT) {
+        return this.bike_type.equals(bikeT);
+    }
 }
