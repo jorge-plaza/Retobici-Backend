@@ -24,8 +24,12 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List<Reservation> getReservations(){
-        return reservationService.getAllReservations();
+    public ResponseEntity<List<ReservationDto>> getReservations(){
+        List<ReservationDto> response = reservationService.getAllReservations()
+                .stream()
+                .map(reservation -> modelMapper.map(reservation, ReservationDto.class))
+                .toList();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "{routeId}")
