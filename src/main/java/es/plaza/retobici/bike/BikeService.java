@@ -1,6 +1,7 @@
 package es.plaza.retobici.bike;
 
 import es.plaza.retobici.exception.ApiRequestException;
+import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.stop.Stop;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,11 @@ public class BikeService {
     }
 
     public Bike getBikeFromStop(Stop stopId, Class<Bike> bikeT){
-        Optional<Bike> result = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stopId));
-        if (result.isEmpty()) throw new ApiRequestException("The is no bike available for that type");
-        return result.get();
+        Bike bike = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stopId))
+                .orElseThrow(() -> new ApiRequestException("The is no bike available for that type"));
+        Spot spot = bike.getSpot();
+        spot.setBike(null);
+        return bike;
     }
 
     @SuppressWarnings("unchecked")

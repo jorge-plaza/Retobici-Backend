@@ -4,8 +4,10 @@ import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class StopService {
         if (stopById.isEmpty()) throw new ApiRequestException("No Stop by given Id");
         return stopById.get();
     }
+    @Transactional
     public Bike unlockBike(Long stopId, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
@@ -37,7 +40,7 @@ public class StopService {
         return getBikeFromStop(stopId, bikeT);
     }
 
-    public boolean checkBikeTypeAvailability(Stop stop, Class<Bike> bikeT) {
+    public boolean checkBikeTypeAvailability(@NotNull Stop stop, Class<Bike> bikeT) {
         List<Reservation> reservationsOfType = stop.getReservations()
                 .stream()
                 .filter(reservation -> reservation.ofBikeType(bikeT))
@@ -50,7 +53,7 @@ public class StopService {
     }
 
     public Bike getBikeFromStop(Long stopId, Class<Bike> bikeT){
-        Stop s = stopRepository.findById(stopId).get();
+        Stop s = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
         return bikeService.getBikeFromStop(s, bikeT);
     }
 

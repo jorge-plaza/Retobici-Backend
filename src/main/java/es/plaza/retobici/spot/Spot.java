@@ -21,6 +21,7 @@ public class Spot {
     private Stop stop;
 
     @OneToOne(targetEntity = Bike.class)
+    @Nullable
     private Bike bike;
 
     public Spot() {
