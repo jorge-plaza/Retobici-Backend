@@ -44,4 +44,8 @@ public class BikeService {
             throw new ApiRequestException("Wrong bike type");
         }
     }
+
+    public Bike findBikeById(Long bike_id) {
+        return bikeRepository.findById(bike_id).orElseThrow(() -> new ApiRequestException("No Bike for that ID"));
+    }
 }

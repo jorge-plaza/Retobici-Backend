@@ -29,6 +29,10 @@ public class Bike {
 
     public Bike() {}
 
+    public Bike(Long id){
+        this.id = id;
+    }
+
     public Bike(Long id, List<Route> routes, Spot spot, Stop stop) {
         this.id = id;
         this.routes = routes;
