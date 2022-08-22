@@ -2,6 +2,8 @@ package es.plaza.retobici.stop;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeDto;
+import es.plaza.retobici.spot.Spot;
+import es.plaza.retobici.spot.SpotDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +40,13 @@ public class StopController {
     }
 
     @PostMapping(path = "/lock/{stopId}")
-    public ResponseEntity<BikeDto> lockBike(
+    public ResponseEntity<SpotDto> lockBike(
             @PathVariable("stopId") Long stopId,
             @RequestParam Long spotId,
             @RequestParam Long bikeId
     ){
-        stopService.lockBike(stopId, spotId, bikeId);
-        BikeDto response = modelMapper.map(new Bike(), BikeDto.class);
+        Spot spot = stopService.lockBike(stopId, spotId, bikeId);
+        SpotDto response = modelMapper.map(spot, SpotDto.class);
         return ResponseEntity.ok(response);
     }
 }

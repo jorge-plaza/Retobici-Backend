@@ -5,6 +5,7 @@ import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
 import es.plaza.retobici.spot.Spot;
+import es.plaza.retobici.spot.SpotDto;
 import es.plaza.retobici.spot.SpotId;
 import es.plaza.retobici.spot.SpotService;
 import org.jetbrains.annotations.NotNull;
@@ -47,12 +48,13 @@ public class StopService {
     }
 
     @Transactional
-    public boolean lockBike(Long stopId, Long spotId, Long bikeId){
+    public Spot lockBike(Long stopId, Long spotId, Long bikeId){
         Spot spot = spotService.findById(new SpotId(spotId, stopId));
         spotService.validateLockSpot(spot);
+
         Bike bike = bikeService.findBikeById(bikeId);
         spotService.lockBikeOnStop(spot, bike);
-        return true;
+        return spot;
     }
 
     public boolean checkBikeTypeAvailability(@NotNull Stop stop, Class<Bike> bikeT) {
