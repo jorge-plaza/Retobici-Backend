@@ -9,6 +9,7 @@ import es.plaza.retobici.user.RiderDto;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 
 @Data
 public class RouteDto {
@@ -21,4 +22,5 @@ public class RouteDto {
     private Integer duration;
     private Integer estimatedDuration;
     private Integer points;
+    private LocalDateTime createDateTime;
 }
