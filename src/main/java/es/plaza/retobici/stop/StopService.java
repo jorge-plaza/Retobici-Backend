@@ -47,12 +47,12 @@ public class StopService {
     }
 
     @Transactional
-    public boolean lockBike(Long stopId, Long spot_id, Long bike_id){
+    public boolean lockBike(Long stopId, Long spotId, Long bikeId){
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
-        Spot spot = spotService.findById(new SpotId(spot_id, stopId));
-        if (stop.enoughSpace()) return false;
+        Spot spot = spotService.findById(new SpotId(spotId, stopId));
+        if (!stop.enoughSpace()) return false;
         if (!spot.isEmpty()) return false;
-        Bike bike = bikeService.findBikeById(bike_id);
+        Bike bike = bikeService.findBikeById(bikeId);
         spot.setBike(bike);
         return true;
     }
