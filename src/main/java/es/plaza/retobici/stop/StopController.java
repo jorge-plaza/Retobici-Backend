@@ -2,6 +2,8 @@ package es.plaza.retobici.stop;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeDto;
+import es.plaza.retobici.route.Route;
+import es.plaza.retobici.route.RouteDto;
 import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.spot.SpotDto;
 import org.modelmapper.ModelMapper;
@@ -29,14 +31,13 @@ public class StopController {
     public List<Stop> getStops(){ return stopService.getStops(); }
 
     @PostMapping(path = "/unlock/{stopId}")
-    public ResponseEntity<BikeDto> unlockBike(
+    public ResponseEntity<RouteDto> unlockBike(
             @PathVariable("stopId") Long stopId,
             @RequestParam String bikeType
     ){
-        Bike bike = stopService.unlockBike(stopId, bikeType);
-        BikeDto response = modelMapper.map(bike, BikeDto.class);
+        Route route = stopService.unlockBike(stopId, bikeType);
+        RouteDto response = modelMapper.map(route, RouteDto.class);
         return ResponseEntity.ok(response);
-
     }
 
     @PostMapping(path = "/lock/{stopId}")

@@ -4,10 +4,13 @@ import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
+import es.plaza.retobici.route.Route;
+import es.plaza.retobici.route.RouteService;
 import es.plaza.retobici.spot.Spot;
-import es.plaza.retobici.spot.SpotDto;
 import es.plaza.retobici.spot.SpotId;
 import es.plaza.retobici.spot.SpotService;
+import es.plaza.retobici.user.Rider;
+import es.plaza.retobici.user.RiderService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,18 @@ public class StopService {
 
     private final SpotService spotService;
 
+    private final RouteService routeService;
+
+    //TODO remove this with users implementation
+    private final RiderService riderService;
+
     @Autowired
-    public StopService(StopRepository stopRepository, BikeService bikeService, SpotService spotService) {
+    public StopService(StopRepository stopRepository, BikeService bikeService, SpotService spotService, RouteService routeService, RiderService riderService) {
         this.stopRepository = stopRepository;
         this.bikeService = bikeService;
         this.spotService = spotService;
+        this.routeService = routeService;
+        this.riderService = riderService;
     }
 
     public List<Stop> getStops(){ return stopRepository.findAll(); }
@@ -40,11 +50,13 @@ public class StopService {
         return stopById.get();
     }
     @Transactional
-    public Bike unlockBike(Long stopId, String bikeType) {
+    public Route unlockBike(Long stopId, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
         if (!checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
-        return getBikeFromStop(stopId, bikeT);
+        Bike bike = getBikeFromStop(stopId, bikeT);
+        Rider rider = riderService.getRider(1L);
+        return routeService.startRoute(rider, stop, bike);
     }
 
     @Transactional
