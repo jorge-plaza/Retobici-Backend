@@ -1,5 +1,8 @@
 package es.plaza.retobici.route;
 
+import es.plaza.retobici.bike.Bike;
+import es.plaza.retobici.stop.Stop;
+import es.plaza.retobici.user.Rider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +28,9 @@ public class RouteService {
     }
 
     public List<Route> getRoutesByRider(Long riderId){ return routeRepository.findRouteByRider(riderId); }
+
+    public Route startRoute(Rider rider, Stop stop, Bike bike) {
+        Route newRoute = new Route(rider, stop, bike);
+        return routeRepository.save(newRoute);
+    }
 }

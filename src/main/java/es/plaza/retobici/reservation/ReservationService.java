@@ -35,7 +35,7 @@ public class ReservationService {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
         Stop stop = stopService.getStop(stopId);
         if (!stopService.checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
-        //TODO get user id
+        //TODO get user id & Schedule timer
         Long fakeUserId = 1L;
         Rider rider = riderService.getRider(fakeUserId);
         Reservation r = new Reservation(rider,stop, bikeT);

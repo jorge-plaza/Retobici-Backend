@@ -27,7 +27,7 @@ public class Route {
     private Stop initialStop;
 
     @ManyToOne
-    @JoinColumn(name = "final_stop_id", nullable = false)
+    @JoinColumn(name = "final_stop_id", nullable = true)
     private Stop finalStop;
 
     @ManyToOne
@@ -58,6 +58,12 @@ public class Route {
         this.estimatedDuration = estimatedDuration;
         this.points = points;
         this.mapboxResponse = mapboxResponse;
+    }
+
+    public Route(Rider rider, Stop initialStop, Bike bike) {
+        this.rider = rider;
+        this.initialStop = initialStop;
+        this.bike = bike;
     }
 
     public Long getId() {
