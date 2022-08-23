@@ -66,6 +66,7 @@ public class StopService {
 
         Bike bike = bikeService.findBikeById(bikeId);
         spotService.lockBikeOnStop(spot, bike);
+        routeService.finishRoute(1L, spot);
         return spot;
     }
 
