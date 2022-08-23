@@ -1,12 +1,12 @@
 package es.plaza.retobici;
 
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
+import es.plaza.retobici.di.MapboxConfigProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(MapboxConfigProperties.class)
 public class DemoApplication {
 
 	public static void main(String[] args) {
