@@ -3,6 +3,8 @@ package es.plaza.retobici.user;
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeRepository;
 import es.plaza.retobici.bike.ElectricBike;
+import es.plaza.retobici.reward.Reward;
+import es.plaza.retobici.reward.RewardRepository;
 import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.spot.SpotRepository;
 import es.plaza.retobici.stop.Stop;
@@ -23,7 +25,8 @@ public class RiderConfig {
             RiderRepository repository,
             StopRepository stopRepository,
             BikeRepository bikeRepository,
-            SpotRepository spotRepository
+            SpotRepository spotRepository,
+            RewardRepository rewardRepository
     ){
         return args -> {
             Rider u1 = new Rider(
@@ -36,6 +39,9 @@ public class RiderConfig {
                     "cris@mail.com",
                     LocalDate.of(2000, Month.DECEMBER,6)
             );
+            Reward r1 = new Reward(1L,"nombre 1", "descripcion 1", 100, 10, List.of(u1));
+            u1.setRewardsRedeemed(List.of(r1));
+            rewardRepository.save(r1);
             repository.saveAll(List.of(u1, u2));
 
             Stop s1 = new Stop(45.477945964124864, 9.169332864676747, "Arco de la paz", 10);
