@@ -1,6 +1,5 @@
 package es.plaza.retobici.user;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import es.plaza.retobici.reservation.Reservation;
 import es.plaza.retobici.reward.Reward;
 import es.plaza.retobici.route.Route;
@@ -39,7 +38,7 @@ public class Rider {
             name = "redeemed_rewards",
             joinColumns = @JoinColumn(name = "rider_id"),
             inverseJoinColumns = @JoinColumn(name = "reward_id"))
-    private List<Reward> rewardsReedemed;
+    private List<Reward> rewardsRedeemed;
 
     @Transient
     private Integer age;
@@ -131,12 +130,12 @@ public class Rider {
         this.reservations = reservations;
     }
 
-    public List<Reward> getRewardsReedemed() {
-        return rewardsReedemed;
+    public List<Reward> getRewardsRedeemed() {
+        return rewardsRedeemed;
     }
 
-    public void setRewardsReedemed(List<Reward> rewardsReedemed) {
-        this.rewardsReedemed = rewardsReedemed;
+    public void setRewardsRedeemed(List<Reward> rewardsReedemed) {
+        this.rewardsRedeemed = rewardsReedemed;
     }
 
     public void setAge(Integer age) {
