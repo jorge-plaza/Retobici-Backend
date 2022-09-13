@@ -40,8 +40,9 @@ public class RiderConfig {
                     LocalDate.of(2000, Month.DECEMBER,6)
             );
             Reward r1 = new Reward(1L,"nombre 1", "descripcion 1", 100, 10, List.of(u1));
+            Reward r2 = new Reward(2L,"nombre 2", "descripcion 2", 200, 20, List.of(u1));
             u1.setRewardsRedeemed(List.of(r1));
-            rewardRepository.save(r1);
+            rewardRepository.saveAll(List.of(r1,r2));
             repository.saveAll(List.of(u1, u2));
 
             Stop s1 = new Stop(45.477945964124864, 9.169332864676747, "Arco de la paz", 10);

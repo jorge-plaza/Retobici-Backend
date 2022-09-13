@@ -25,7 +25,12 @@ public class RewardController {
     }
 
     @GetMapping
-    public List<Reward> getRewards(){ return rewardService.getAllRewards(); }
+    public ResponseEntity<List<RewardDto>> getRewards(){
+        List<RewardDto> result = rewardService.getAllRewards().stream()
+                .map(reward -> modelMapper.map(reward, RewardDto.class))
+                .toList();
+        return ResponseEntity.ok(result);
+    }
 
     @GetMapping(path = "/rider/{riderId}")
     public ResponseEntity<List<RewardDto>> getRiderRewards(
