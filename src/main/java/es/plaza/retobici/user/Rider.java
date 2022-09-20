@@ -25,6 +25,8 @@ public class Rider {
     private Long id;
     private String name;
     private String email;
+
+    private String password;
     private LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "rider")
@@ -46,10 +48,11 @@ public class Rider {
     public Rider() {
     }
 
-    public Rider(Long id, String name, String email, LocalDate dateOfBirth, List<Route> routes) {
+    public Rider(Long id, String name, String email, String password, LocalDate dateOfBirth, List<Route> routes) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.routes = routes;
     }
@@ -83,6 +86,8 @@ public class Rider {
         return email;
     }
 
+    public String getPassword(){ return password; }
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -98,6 +103,8 @@ public class Rider {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setPassword(String password){ this.password = password; }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
