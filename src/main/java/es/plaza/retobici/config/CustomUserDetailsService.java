@@ -1,7 +1,8 @@
 package es.plaza.retobici.config;
 
-import es.plaza.retobici.user.Rider;
-import es.plaza.retobici.user.RiderRepository;
+import es.plaza.retobici.user.rider.Rider;
+import es.plaza.retobici.user.rider.RiderRepository;
+import es.plaza.retobici.user.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,20 +18,23 @@ import java.util.Set;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private final RiderRepository riderRepository;
+
     @Autowired
-    private RiderRepository riderRepository;
+    public CustomUserDetailsService(RiderRepository riderRepository) {
+        this.riderRepository = riderRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Rider rider = riderRepository.findRiderByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Rider registered with that email"));
-        return new User(rider.getEmail(), rider.getPassword(), mapearRoles(null));
+        return new User(rider.getEmail(), rider.getPassword(), mapRoles(rider.getRoles()));
     }
 
-    //TODO cambiar por clase ROl
-    private Collection<? extends GrantedAuthority> mapearRoles(Set<Object> roles){
+    private Collection<? extends GrantedAuthority> mapRoles(Set<Role> roles){
         return roles.stream()
-                .map(rol -> new SimpleGrantedAuthority(rol.toString()))
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .toList();
     }
 }
