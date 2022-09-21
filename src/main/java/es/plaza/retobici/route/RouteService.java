@@ -5,7 +5,7 @@ import es.plaza.retobici.di.MapboxClient;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.stop.Stop;
-import es.plaza.retobici.user.Rider;
+import es.plaza.retobici.user.rider.Rider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

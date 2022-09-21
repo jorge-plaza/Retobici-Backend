@@ -1,13 +1,15 @@
-package es.plaza.retobici.user;
+package es.plaza.retobici.user.rider;
 
 import es.plaza.retobici.reservation.Reservation;
 import es.plaza.retobici.reward.Reward;
 import es.plaza.retobici.route.Route;
+import es.plaza.retobici.user.role.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -42,6 +44,13 @@ public class Rider {
             inverseJoinColumns = @JoinColumn(name = "reward_id"))
     private List<Reward> rewardsRedeemed;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "rider_roles",
+            joinColumns = @JoinColumn(name = "rider_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
     @Transient
     private Integer age;
 
@@ -68,6 +77,14 @@ public class Rider {
         this.name = name;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Rider(String name, String email, String password, LocalDate dateOfBirth, Set<Role> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -147,5 +164,13 @@ public class Rider {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

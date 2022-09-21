@@ -1,10 +1,8 @@
 package es.plaza.retobici.reservation;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.stop.Stop;
-import es.plaza.retobici.user.Rider;
-import org.springframework.lang.Nullable;
+import es.plaza.retobici.user.rider.Rider;
 
 import javax.persistence.*;
 

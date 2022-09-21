@@ -1,4 +1,4 @@
-package es.plaza.retobici.user;
+package es.plaza.retobici.user.rider;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeRepository;
@@ -9,35 +9,49 @@ import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.spot.SpotRepository;
 import es.plaza.retobici.stop.Stop;
 import es.plaza.retobici.stop.StopRepository;
+import es.plaza.retobici.user.role.Role;
+import es.plaza.retobici.user.role.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class RiderConfig {
-
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     CommandLineRunner commandLineRunner(
             RiderRepository repository,
             StopRepository stopRepository,
             BikeRepository bikeRepository,
             SpotRepository spotRepository,
-            RewardRepository rewardRepository
+            RewardRepository rewardRepository,
+            RoleRepository roleRepository
     ){
         return args -> {
+            Role role1 = new Role("ROLE_USER");
+            Role role2 = new Role("ROLE_ADMIN");
             Rider u1 = new Rider(
                     "Jorge",
                     "jorge@mail.com",
-                    LocalDate.of(2000, Month.DECEMBER,5)
+                    passwordEncoder().encode("password"),
+                    LocalDate.of(2000, Month.DECEMBER,5),
+                    Set.of(role1)
             );
             Rider u2 = new Rider(
                     "Cristina",
                     "cris@mail.com",
-                    LocalDate.of(2000, Month.DECEMBER,6)
+                    passwordEncoder().encode("password"),
+                    LocalDate.of(2000, Month.DECEMBER,6),
+                    Set.of(role2)
             );
             Reward r1 = new Reward(1L,"nombre 1", "descripcion 1", 100, 10, List.of(u1));
             Reward r2 = new Reward(2L,"nombre 2", "descripcion 2", 200, 20, List.of(u1));

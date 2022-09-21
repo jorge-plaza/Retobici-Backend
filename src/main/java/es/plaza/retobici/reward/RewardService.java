@@ -1,7 +1,7 @@
 package es.plaza.retobici.reward;
 
-import es.plaza.retobici.user.Rider;
-import es.plaza.retobici.user.RiderService;
+import es.plaza.retobici.user.rider.Rider;
+import es.plaza.retobici.user.rider.RiderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

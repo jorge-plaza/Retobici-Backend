@@ -1,4 +1,4 @@
-package es.plaza.retobici.user;
+package es.plaza.retobici.user.rider;
 
 import lombok.Data;
 

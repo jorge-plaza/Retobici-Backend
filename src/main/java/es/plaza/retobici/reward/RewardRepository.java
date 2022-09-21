@@ -1,6 +1,6 @@
 package es.plaza.retobici.reward;
 
-import es.plaza.retobici.user.Rider;
+import es.plaza.retobici.user.rider.Rider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

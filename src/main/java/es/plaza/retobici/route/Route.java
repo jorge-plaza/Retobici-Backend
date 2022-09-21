@@ -2,16 +2,12 @@ package es.plaza.retobici.route;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.stop.Stop;
-import es.plaza.retobici.user.Rider;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import es.plaza.retobici.user.rider.Rider;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "routes")

@@ -1,4 +1,4 @@
-package es.plaza.retobici.user;
+package es.plaza.retobici.user.rider;
 
 import es.plaza.retobici.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
