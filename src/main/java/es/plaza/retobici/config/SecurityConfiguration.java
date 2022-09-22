@@ -1,18 +1,25 @@
 package es.plaza.retobici.config;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
@@ -22,9 +29,12 @@ public class SecurityConfiguration {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+
+    private final RsaKeyProperties rsaKeyProperties;
     @Autowired
-    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService, RsaKeyProperties rsaKeyProperties) {
         this.customUserDetailsService = customUserDetailsService;
+        this.rsaKeyProperties = rsaKeyProperties;
     }
 
     @Bean
@@ -32,12 +42,14 @@ public class SecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> {
-                    auth.antMatchers("/").permitAll();
-                    auth.antMatchers("/api/v1/rewards/").hasRole("ADMIN");
+                    //auth.antMatchers("/").permitAll();
+                    //auth.antMatchers("/api/v1/rewards/").hasRole("ADMIN");
+                    auth.anyRequest().authenticated();
                 })
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .userDetailsService(customUserDetailsService)
-                .sessionManagement(session -> session.maximumSessions(1))
                 .build();
     }
 
@@ -46,6 +58,19 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public JwtDecoder jwtDecoder(){
+        return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.publicKey()).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder(){
+        JWK jwk = new RSAKey.Builder(rsaKeyProperties.publicKey())
+                .privateKey(rsaKeyProperties.privateKey())
+                .build();
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwks);
+    }
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         //Used for concurrent user session limited to 1
