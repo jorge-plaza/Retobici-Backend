@@ -1,10 +1,9 @@
 package es.plaza.retobici.reservation;
 
-import es.plaza.retobici.exception.ApiRequestException;
-import es.plaza.retobici.route.Route;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +39,10 @@ public class ReservationController {
     @PostMapping(path = "{stopId}")
     public ResponseEntity<ReservationDto> reserveBike(
             @PathVariable("stopId") Long stopId,
-            @RequestParam String bikeType
+            @RequestParam String bikeType,
+            Authentication auth
     ){
-        Reservation reservation = reservationService.reserveBike(stopId, bikeType);
+        Reservation reservation = reservationService.reserveBike(auth.getName(), stopId, bikeType);
         ReservationDto response = modelMapper.map(reservation, ReservationDto.class);
         return ResponseEntity.ok(response);
     }
