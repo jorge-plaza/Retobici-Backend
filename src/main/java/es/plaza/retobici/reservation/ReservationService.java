@@ -46,4 +46,13 @@ public class ReservationService {
     public Optional<Reservation> activeReservation(Rider rider){
         return reservationRepository.findByRiderAndIsActiveIsTrue(rider);
     }
+
+    public void disableReservation(String email) {
+        Rider rider = riderService.getRiderByEmail(email);
+        activeReservation(rider)
+                .ifPresent(reservation -> {
+                    reservation.setActive(false);
+                    reservationRepository.save(reservation);
+                });
+    }
 }
