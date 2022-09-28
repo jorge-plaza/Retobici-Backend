@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -35,11 +36,14 @@ public class ReservationService {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
         Stop stop = stopService.getStop(stopId);
         if (!stopService.checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
-        //TODO get user id & Schedule timer
-        Long fakeUserId = 1L;
-        Rider rider = riderService.getRider(fakeUserId);
+        //TODO Schedule timer
+        Rider rider = riderService.getRiderByEmail(email);
+        if (activeReservation(rider).isPresent()) throw new ApiRequestException("This Rider already has a reservation");
         Reservation r = new Reservation(rider,stop, bikeT);
         return reservationRepository.save(r);
     }
 
+    public Optional<Reservation> activeReservation(Rider rider){
+        return reservationRepository.findByRiderAndIsActiveIsTrue(rider);
+    }
 }

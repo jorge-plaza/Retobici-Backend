@@ -27,6 +27,12 @@ public class RiderService {
                 () -> new ApiRequestException("Rider with that id does not exists"));
     }
 
+    public Rider getRiderByEmail(String email){
+        return riderRepository.findRiderByEmail(email).orElseThrow(
+                () -> new ApiRequestException("Rider with that email does not exists")
+        );
+    }
+
     public void addnewRider(Rider rider) {
         Optional<Rider> riderByEmail = riderRepository.findRiderByEmail(rider.getEmail());
         if (riderByEmail.isEmpty()){
