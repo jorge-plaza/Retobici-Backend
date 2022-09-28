@@ -25,12 +25,15 @@ public class Reservation {
     @Column(nullable = false)
     private Class<? extends Bike> bike_type;
 
+    private Boolean isActive;
+
     public Reservation() {}
 
     public Reservation(Rider rider, Stop stop, Class<? extends Bike> bike_type) {
         this.rider = rider;
         this.stop = stop;
         this.bike_type = bike_type;
+        this.isActive = true;
     }
 
     public Reservation(Long id, Rider rider, Stop stop, Class<? extends Bike> bike_type) {
@@ -38,6 +41,15 @@ public class Reservation {
         this.rider = rider;
         this.stop = stop;
         this.bike_type = bike_type;
+        this.isActive = true;
+    }
+
+    public Reservation(Long id, Rider rider, Stop stop, Class<? extends Bike> bike_type, Boolean isActive) {
+        this.id = id;
+        this.rider = rider;
+        this.stop = stop;
+        this.bike_type = bike_type;
+        this.isActive = isActive;
     }
 
     public Long getId() {
@@ -74,5 +86,13 @@ public class Reservation {
 
     public boolean ofBikeType(Class<? extends Bike> bikeT) {
         return this.bike_type.equals(bikeT);
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
