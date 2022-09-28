@@ -4,6 +4,7 @@ import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
+import es.plaza.retobici.reservation.ReservationService;
 import es.plaza.retobici.route.Route;
 import es.plaza.retobici.route.RouteService;
 import es.plaza.retobici.spot.Spot;
@@ -50,13 +51,22 @@ public class StopService {
         return stopById.get();
     }
     @Transactional
-    public Route unlockBike(Long stopId, String bikeType) {
+    public Route unlockBike(Long stopId, String email, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
         Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
-        if (!checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
+        Rider rider = riderService.getRiderByEmail(email);
+        if (!checkBikeTypeAvailability(stop,bikeT)){
+            if (!matchReservation(stop,rider, bikeT)) throw new ApiRequestException("No bikes available for that type");
+        }
         Bike bike = getBikeFromStop(stopId, bikeT);
-        Rider rider = riderService.getRider(1L);
         return routeService.startRoute(rider, stop, bike);
+    }
+
+    private boolean matchReservation(Stop stop, Rider rider, Class<? extends Bike> bikeT) {
+        return stop.getReservations().stream()
+                .filter(reservation -> reservation.getRider().equals(rider))
+                .filter(reservation -> reservation.ofBikeType(bikeT))
+                .anyMatch(Reservation::getActive);
     }
 
     @Transactional
