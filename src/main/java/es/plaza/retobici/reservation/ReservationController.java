@@ -1,6 +1,7 @@
 package es.plaza.retobici.reservation;
 
 import es.plaza.retobici.stop.Stop;
+import es.plaza.retobici.user.rider.Rider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,9 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(path = "{routeId}")
-    public List<Reservation> getRouteById(@PathVariable Long routeId){
-        return reservationService.getRiderReservations(routeId);
+    @GetMapping(path = "{riderId}")
+    public List<Reservation> getRiderReservations(@PathVariable("riderId") Rider rider){
+        return reservationService.getRiderReservations(rider);
     }
 
     @PostMapping(path = "{stopId}")

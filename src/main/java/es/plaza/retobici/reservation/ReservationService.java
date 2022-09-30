@@ -30,7 +30,7 @@ public class ReservationService {
 
     public List<Reservation> getAllReservations(){ return reservationRepository.findAll(); }
 
-    public List<Reservation> getRiderReservations(Long rider){ return reservationRepository.findByRider(rider); }
+    public List<Reservation> getRiderReservations(Rider rider){ return reservationRepository.findByRider(rider); }
 
     public Reservation reserveBike(String email, Stop stop, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);

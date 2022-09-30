@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    public List<Reservation> findByRider(Long rider);
+    public List<Reservation> findByRider(Rider rider);
 
     public Optional<Reservation> findByRiderAndIsActiveIsTrue(Rider rider);
 }
