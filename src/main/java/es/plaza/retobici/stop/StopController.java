@@ -35,11 +35,11 @@ public class StopController {
 
     @PostMapping(path = "/unlock/{stopId}")
     public ResponseEntity<RouteDto> unlockBike(
-            @PathVariable("stopId") Long stopId,
+            @PathVariable("stopId") Stop stop,
             @RequestParam String bikeType,
             Authentication auth
     ){
-        Route route = stopService.unlockBike(stopId, auth.getName(), bikeType);
+        Route route = stopService.unlockBike(stop, auth.getName(), bikeType);
         reservationService.disableReservation(auth.getName());
         RouteDto response = modelMapper.map(route, RouteDto.class);
         return ResponseEntity.ok(response);

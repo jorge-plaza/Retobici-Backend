@@ -26,8 +26,8 @@ public class BikeService {
         return bikeRepository.findAll();
     }
 
-    public Bike getBikeFromStop(Stop stopId, Class<Bike> bikeT){
-        Bike bike = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stopId))
+    public Bike getBikeFromStop(Stop stop, Class<Bike> bikeT){
+        Bike bike = bikeRepository.findOne(BikeSpecification.searchByType(bikeT,stop))
                 .orElseThrow(() -> new ApiRequestException("The is no bike available for that type"));
         Spot spot = bike.getSpot();
         spot.setBike(null);

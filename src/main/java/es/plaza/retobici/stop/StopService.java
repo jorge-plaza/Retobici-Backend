@@ -51,14 +51,13 @@ public class StopService {
         return stopById.get();
     }
     @Transactional
-    public Route unlockBike(Long stopId, String email, String bikeType) {
+    public Route unlockBike(Stop stop, String email, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
-        Stop stop = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
         Rider rider = riderService.getRiderByEmail(email);
         if (!checkBikeTypeAvailability(stop,bikeT)){
             if (!matchReservation(stop,rider, bikeT)) throw new ApiRequestException("No bikes available for that type");
         }
-        Bike bike = getBikeFromStop(stopId, bikeT);
+        Bike bike = getBikeFromStop(stop, bikeT);
         return routeService.startRoute(rider, stop, bike);
     }
 
@@ -92,9 +91,8 @@ public class StopService {
         return bikesOfType.size() > reservationsOfType.size();
     }
 
-    public Bike getBikeFromStop(Long stopId, Class<Bike> bikeT){
-        Stop s = stopRepository.findById(stopId).orElseThrow(() -> new ApiRequestException("No Stop for that ID"));
-        return bikeService.getBikeFromStop(s, bikeT);
+    public Bike getBikeFromStop(Stop stop, Class<Bike> bikeT){
+        return bikeService.getBikeFromStop(stop, bikeT);
     }
 
 }
