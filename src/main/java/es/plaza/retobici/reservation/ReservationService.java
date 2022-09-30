@@ -32,9 +32,8 @@ public class ReservationService {
 
     public List<Reservation> getRiderReservations(Long rider){ return reservationRepository.findByRider(rider); }
 
-    public Reservation reserveBike(String email, Long stopId, String bikeType) {
+    public Reservation reserveBike(String email, Stop stop, String bikeType) {
         Class<Bike> bikeT = BikeService.parseBikeType(bikeType);
-        Stop stop = stopService.getStop(stopId);
         if (!stopService.checkBikeTypeAvailability(stop,bikeT)) throw new ApiRequestException("No bikes available for that type");
         //TODO Schedule timer
         Rider rider = riderService.getRiderByEmail(email);

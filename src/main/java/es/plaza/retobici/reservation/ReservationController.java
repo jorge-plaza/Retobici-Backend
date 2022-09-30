@@ -1,5 +1,6 @@
 package es.plaza.retobici.reservation;
 
+import es.plaza.retobici.stop.Stop;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +39,11 @@ public class ReservationController {
 
     @PostMapping(path = "{stopId}")
     public ResponseEntity<ReservationDto> reserveBike(
-            @PathVariable("stopId") Long stopId,
+            @PathVariable("stopId") Stop stop,
             @RequestParam String bikeType,
             Authentication auth
     ){
-        Reservation reservation = reservationService.reserveBike(auth.getName(), stopId, bikeType);
+        Reservation reservation = reservationService.reserveBike(auth.getName(), stop, bikeType);
         ReservationDto response = modelMapper.map(reservation, ReservationDto.class);
         return ResponseEntity.ok(response);
     }
