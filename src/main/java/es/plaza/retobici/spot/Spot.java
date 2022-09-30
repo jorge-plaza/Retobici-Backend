@@ -8,14 +8,14 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "spots")
-@IdClass(SpotId.class)
 public class Spot {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "spot_seq")
+    @SequenceGenerator(name = "spot_seq")
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "stop_id")
     private Stop stop;

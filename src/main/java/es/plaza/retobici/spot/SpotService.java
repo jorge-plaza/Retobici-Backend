@@ -16,7 +16,7 @@ public class SpotService {
         this.spotRepository = spotRepository;
     }
 
-    public Spot findById(SpotId spot_id) {
+    public Spot findById(Long spot_id) {
         return spotRepository.findById(spot_id).orElseThrow(() -> new ApiRequestException("No Spot for that ID"));
     }
 

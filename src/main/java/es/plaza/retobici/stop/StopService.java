@@ -4,11 +4,9 @@ import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.bike.BikeService;
 import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
-import es.plaza.retobici.reservation.ReservationService;
 import es.plaza.retobici.route.Route;
 import es.plaza.retobici.route.RouteService;
 import es.plaza.retobici.spot.Spot;
-import es.plaza.retobici.spot.SpotId;
 import es.plaza.retobici.spot.SpotService;
 import es.plaza.retobici.user.rider.Rider;
 import es.plaza.retobici.user.rider.RiderService;
@@ -69,8 +67,8 @@ public class StopService {
     }
 
     @Transactional
-    public Spot lockBike(Long stopId, Long spotId, Long bikeId){
-        Spot spot = spotService.findById(new SpotId(spotId, stopId));
+    public Spot lockBike(Long spotId, Long bikeId){
+        Spot spot = spotService.findById(spotId);
         spotService.validateLockSpot(spot);
 
         Bike bike = bikeService.findBikeById(bikeId);

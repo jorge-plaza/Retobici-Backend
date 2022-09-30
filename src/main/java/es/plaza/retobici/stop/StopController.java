@@ -45,13 +45,12 @@ public class StopController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(path = "/lock/{stopId}")
+    @PostMapping(path = "/lock/{spotId}")
     public ResponseEntity<SpotDto> lockBike(
-            @PathVariable("stopId") Long stopId,
-            @RequestParam Long spotId,
+            @PathVariable Long spotId,
             @RequestParam Long bikeId
     ){
-        Spot spot = stopService.lockBike(stopId, spotId, bikeId);
+        Spot spot = stopService.lockBike(spotId, bikeId);
         SpotDto response = modelMapper.map(spot, SpotDto.class);
         return ResponseEntity.ok(response);
     }
