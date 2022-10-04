@@ -22,8 +22,7 @@ public class RewardService {
 
     public List<Reward> getAllRewards(){ return rewardRepository.findAll(); }
 
-    public List<Reward> getRiderRedeemedRewards(Long riderId){
-        Rider rider =  riderService.getRider(riderId);
+    public List<Reward> getRiderRedeemedRewards(Rider rider){
         return rewardRepository.findAllByRiders(rider);
     }
 }

@@ -1,5 +1,6 @@
 package es.plaza.retobici.reward;
 
+import es.plaza.retobici.user.rider.Rider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,9 @@ public class RewardController {
 
     @GetMapping(path = "/rider/{riderId}")
     public ResponseEntity<List<RewardDto>> getRiderRewards(
-            @PathVariable(name = "riderId") Long riderId
+            @PathVariable(name = "riderId") Rider rider
     ){
-        List<RewardDto> result = rewardService.getRiderRedeemedRewards(riderId).stream()
+        List<RewardDto> result = rewardService.getRiderRedeemedRewards(rider).stream()
                 .map(reward -> modelMapper.map(reward, RewardDto.class))
                 .toList();
         return ResponseEntity.ok(result);
