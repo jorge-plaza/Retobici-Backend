@@ -1,5 +1,6 @@
 package es.plaza.retobici.user.rider;
 
+import es.plaza.retobici.exception.ApiRequestException;
 import es.plaza.retobici.reservation.Reservation;
 import es.plaza.retobici.reward.Reward;
 import es.plaza.retobici.route.Route;
@@ -172,5 +173,9 @@ public class Rider {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+    //TODO revisar como ordena para obtener la ruta activa
+    public Route getActiveRoute() {
+        return this.routes.stream().sorted().findFirst().orElseThrow(() -> new ApiRequestException("The Rider does not have any Route"));
     }
 }

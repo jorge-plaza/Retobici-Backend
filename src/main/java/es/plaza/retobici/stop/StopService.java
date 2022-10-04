@@ -67,14 +67,14 @@ public class StopService {
     }
 
     @Transactional
-    public Spot lockBike(Long spotId, Long bikeId){
+    public Route lockBike(Long spotId, String email){
         Spot spot = spotService.findById(spotId);
         spotService.validateLockSpot(spot);
-
-        Bike bike = bikeService.findBikeById(bikeId);
+        Rider rider = riderService.getRiderByEmail(email);
+        Route route = rider.getActiveRoute();
+        Bike bike = route.getBike();
         spotService.lockBikeOnStop(spot, bike);
-        routeService.finishRoute(1L, spot);
-        return spot;
+        return routeService.finishRoute(route, spot);
     }
 
     public boolean checkBikeTypeAvailability(@NotNull Stop stop, Class<Bike> bikeT) {

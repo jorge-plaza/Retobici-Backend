@@ -59,12 +59,14 @@ public class RiderConfig {
             rewardRepository.saveAll(List.of(r1,r2));
             repository.saveAll(List.of(u1, u2));
 
-            Stop s1 = new Stop(45.477945964124864, 9.169332864676747, "Arco de la paz", 10);
-            stopRepository.save(s1);
+
+            Stop s1 = new Stop(41.6522399764781, -4.728666131260626, "Arco de la paz", 10);
+            Stop s2 = new Stop(41.6370045475204, -4.760491318874255, "Parque de la rueda", 10);
+            stopRepository.saveAll(List.of(s1,s2));
 
             Spot sp1 = new Spot(1L,s1);
             Spot sp2 = new Spot(2L,s1);
-            Spot sp3 = new Spot(3L,s1);
+            Spot sp3 = new Spot(3L,s2);
 
             Bike b1 = new Bike();
             ElectricBike b2 = new ElectricBike(60);

@@ -37,12 +37,12 @@ public class Route {
     @Column(name = "distance", nullable = true)
     private Float distance;
     @Column(name = "duration", nullable = true)
-    private Integer duration;
+    private Float duration;
     @Column(name = "estimated_duration", nullable = true)
     private Integer estimatedDuration;
     @Column(name = "points", nullable = true)
     private Integer points;
-    @Column(name = "mapbox_response", nullable = true)
+    @Column(name = "mapbox_response", nullable = true, length = 2048)
     private String mapboxResponse;
 
     @CreationTimestamp
@@ -53,7 +53,7 @@ public class Route {
 
     public Route() {}
 
-    public Route(Long id, Rider rider, Stop initialStop, Stop finalStop, Bike bike, Float distance, Integer duration, Integer estimatedDuration, Integer points, String mapboxResponse) {
+    public Route(Long id, Rider rider, Stop initialStop, Stop finalStop, Bike bike, Float distance, Float duration, Integer estimatedDuration, Integer points, String mapboxResponse) {
         this.id = id;
         this.rider = rider;
         this.initialStop = initialStop;
@@ -120,11 +120,11 @@ public class Route {
         this.distance = distance;
     }
 
-    public Integer getDuration() {
+    public Float getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(Float duration) {
         this.duration = duration;
     }
 

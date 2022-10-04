@@ -2,7 +2,7 @@ package es.plaza.retobici.route;
 
 import es.plaza.retobici.bike.Bike;
 import es.plaza.retobici.di.MapboxClient;
-import es.plaza.retobici.exception.ApiRequestException;
+import es.plaza.retobici.route.mapbox.MapboxResponse;
 import es.plaza.retobici.spot.Spot;
 import es.plaza.retobici.stop.Stop;
 import es.plaza.retobici.user.rider.Rider;
@@ -45,25 +45,30 @@ public class RouteService {
         return routeRepository.save(newRoute);
     }
 
-    public Route finishRoute(Long routeId, Spot spot) {
-        Route route = routeRepository.findById(routeId).orElseThrow(() -> new ApiRequestException("No Route for that ID"));
+    public Route finishRoute(Route route, Spot spot) {
         Stop initialStop = route.getInitialStop();
         Stop finalStop =  spot.getStop();
 
-
-        WebClient client = WebClient.create();
         Double lng1 = initialStop.getLng();
         Double lng2 = finalStop.getLng();
         Double lat1 = initialStop.getLat();
         Double lat2 = finalStop.getLat();
-        String coordenates = lng1+","+lat1+";"+lng2+","+lat2;
+        String coordinates = lat1+","+lng1+";"+lat2+","+lng2;
         String token = mapboxClient.token;
-        ResponseEntity<String> res = mapboxClient.client.get()
-                .uri("https://api.mapbox.com/directions/v5/mapbox/cycling/"+coordenates+"?alternatives=false&geometries=geojson&overview=full&steps=false&access_token="+token)
+
+        ResponseEntity<MapboxResponse> mapboxResponse = mapboxClient.client.get()
+                .uri("https://api.mapbox.com/directions/v5/mapbox/cycling/{coordinates}?alternatives=false&geometries=geojson&overview=full&steps=false&access_token={token}"
+                    ,coordinates, token)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(MapboxResponse.class)
                 .block();
-        System.out.println(res);
-        return null;
+        route.setMapboxResponse(mapboxResponse.getBody().toString());
+        route.setDistance(mapboxResponse.getBody().getDistance());
+        route.setDuration(mapboxResponse.getBody().getDuration());
+        route.setFinalStop(finalStop);
+        //TODO cambiar el sistema de puntos
+        route.setPoints(100);
+        return routeRepository.save(route);
+        //route.setMapboxResponse(mapboxResponse.toString());
     }
 }
